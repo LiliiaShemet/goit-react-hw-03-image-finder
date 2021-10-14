@@ -1,33 +1,53 @@
 import { Component } from "react";
-import PropTypes from 'prop-types';
-import s from './Searchbar.module.css';
+import s from "./Searchbar.module.css";
+import { toast } from "react-toastify";
+import Container from "../Container";
 
-function Searchbar({ onHandleSubmit, onSearchQueryChange, value }) {
-  return (
-    <header className={s.header}>
-      <form className={s.form} onSubmit={onHandleSubmit}>
-        <button type="submit" className={s.btn}>
-          <span className={s.label}>Search</span>
-        </button>
 
-        <input
-          className={s.input}
-          type="text"
-          value={value}
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-          onChange={onSearchQueryChange}
-        />
-      </form>
-    </header>
-  );
+class SearchBar extends Component {
+  state = {
+    query: "",
+  };
+
+  handleSubmitForm = e => {
+    e.preventDefault();
+
+    if (!this.state.query) {
+      toast.error("Please, enter your request!");
+      return;
+    }
+
+    this.props.onSubmit(this.state.query);
+    this.setState({ query: "" });
+  };
+
+  handleChangeQuery = e => {
+    this.setState({ query: e.currentTarget.value.toLowerCase().trim() });
+  };
+
+  render() {
+    return (
+      <header className={s.Searchbar}>
+        <Container>
+          <form onSubmit={this.handleSubmitForm} className={s.Form}>
+            <button type="submit" className={s.Button}>
+              <span className={s.Label}>Search</span>
+            </button>
+
+            <input
+              className={s.Input}
+              type="text"
+              autoComplete="off"
+              autoFocus
+              placeholder="Search images and photos"
+              onChange={this.handleChangeQuery}
+              value={this.state.query}
+            />
+          </form>
+        </Container>
+      </header>
+    );
+  }
 }
 
-Searchbar.propTypes = {
-  onHandleSubmit: PropTypes.func.isRequired,
-  onSearchQueryChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-};
-
-export default Searchbar;
+export default SearchBar;
