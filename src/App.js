@@ -94,7 +94,7 @@ class App extends Component {
 
     return (
       <>
-        <Searchbar onSubmit={this.handleFormSubmit} />;
+        <Searchbar onSubmit={this.handleFormSubmit} />
         <Section>
           <Container>
             {status === 'idle' && <Request />}
